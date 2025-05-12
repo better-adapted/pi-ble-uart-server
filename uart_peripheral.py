@@ -12,6 +12,9 @@ LE_ADVERTISING_MANAGER_IFACE = 'org.bluez.LEAdvertisingManager1'
 GATT_MANAGER_IFACE =           'org.bluez.GattManager1'
 GATT_CHRC_IFACE =              'org.bluez.GattCharacteristic1'
 
+STATUS_DUMMY = '{"command": "RS_MACHINE_STATUS","data": {"machineSerialNumber": "566GGHHHD","machineType": "Type 1","machineSettings": {"id": "ADEE669691","name": "default_settings","diameter": 10,"pulsesPerTurn": 100},"sensor": {"sensorSerialNumber": "5678"},"createdAt": "2025-05-07T15:33:06.149Z","updatedAt": "2025-05-07T15:33:06.149Z"}}'
+
+
 # UART_RX_CHARACTERISTIC_UUID =  '6e400002-b5a3-f393-e0a9-e50e24dcca9e'
 # UART_TX_CHARACTERISTIC_UUID =  '6e400003-b5a3-f393-e0a9-e50e24dcca9e'
 # LOCAL_NAME =                   'rpi-gatt-server'
@@ -65,6 +68,11 @@ class COBS_TxRxCharacteristic(Characteristic):
 
     def WriteValue(self, value, options):
         print('remote: {}'.format(bytearray(value).decode()))
+        temp = format(bytearray(value).decode())
+        if temp == '${"command":"MA_GET_MACHINE_STATUS"}\00':            
+            for c in temp:
+                value.append(dbus.Byte(c.encode()))
+            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': value}, [])
 
 
 class NUS_TxCharacteristic(Characteristic):

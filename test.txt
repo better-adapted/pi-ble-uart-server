@@ -1,0 +1,83 @@
+{
+  "command": "RS_MACHINE_STATUS",
+  "data": {
+    "machineSerialNumber": "566GGHHHD",
+    "machineType": "Type 1",
+    "machineSettings": {
+      "id": "ADEE669691",
+      "name": "default_settings",
+      "diameter": 10,
+      "pulsesPerTurn": 100
+    },
+    "sensor": {
+      "sensorSerialNumber": "5678"
+    },
+    "createdAt": "2025-05-07T15:33:06.149Z",
+    "updatedAt": "2025-05-07T15:33:06.149Z"
+  }
+}
+
+{
+  "command": "RS_MACHINE_STATUS",
+  "data": {
+    "machineSerialNumber": "default_serial_number",
+    "machineType": "Type 1",
+    "machineSettings": {
+      "id": "1",
+      "name": "default_settings",
+      "diameter": 10,
+      "pulsesPerTurn": 100
+    },
+    "sensor": {
+      "sensorSerialNumber": "5678"
+    },
+    "createdAt": "2025-05-07T16:14:16.951Z",
+    "updatedAt": "2025-05-07T16:14:16.951Z",
+    "activeRecording": {
+      "id": "REC_19d2a212-c570-44ac-a456-b03863b22a53",
+      "job": {
+        "id": "02ea795d-7518-44a0-af3e-e2ae6171",
+        "customerName": "job 1",
+        "customerAddress": "fggggh",
+        "createdAt": "2025-04-10T12:50:24.973813",
+        "updatedAt": "2025-04-10T12:50:24.973814"
+      },
+      "material": {
+        "id": "e3661098-0997-4530-a872-500df62cba76",
+        "name": "gvjgb",
+        "specificWeight": 259,
+        "adjustmentFactor": 250,
+        "createdAt": "2025-04-01T12:11:47.516991",
+        "updatedAt": "2025-04-01T12:11:47.516992"
+      },
+      "machineSerialNumber": "default_serial_number",
+      "machineSettings": {
+        "id": "1",
+        "name": "default_settings",
+        "diameter": 10,
+        "pulsesPerTurn": 100
+      },
+      "operator": {
+        "id": "UnKHVf9xgeQkF3eTA27VY423Fuv1",
+        "name": "alec.kingsnorth@gmail.com",
+        "createdAt": "2025-04-01T11:43:55.292639",
+        "updatedAt": "2025-04-01T11:43:55.292642"
+      },
+      "startDate": "2025-05-07T16:14:55.067Z",
+      "activeVolumeSession": {
+        "id": "VOL_R4XYCLW",
+        "totalVolume": 0,
+        "startDate": "2025-05-07T16:14:55.067Z",
+        "createdAt": "2025-05-07T16:14:55.067Z",
+        "updatedAt": "2025-05-07T16:14:55.067Z",
+        "flowRate": 0,
+        "rpm": 5.019957056642924
+      },
+      "completeVolumeSessions": [],
+      "createdAt": "2025-05-07T16:14:55.067Z",
+      "updatedAt": "2025-05-07T16:14:56.959Z"
+    }
+  }
+}
+
+
