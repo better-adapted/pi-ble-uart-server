@@ -1,3 +1,5 @@
+${"command":"MA_GET_MACHINE_STATUS"}
+
 {
   "command": "RS_MACHINE_STATUS",
   "data": {

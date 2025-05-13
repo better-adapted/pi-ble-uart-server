@@ -5,6 +5,7 @@ from example_advertisement import Advertisement
 from example_advertisement import register_ad_cb, register_ad_error_cb
 from example_gatt_server import Service, Characteristic
 from example_gatt_server import register_app_cb, register_app_error_cb
+from cobs import cobs
 
 BLUEZ_SERVICE_NAME =           'org.bluez'
 DBUS_OM_IFACE =                'org.freedesktop.DBus.ObjectManager'
@@ -35,8 +36,11 @@ NUS_LOCAL_NAME =              'NUS_1605'
 mainloop = None
 
 class COBS_TxRxCharacteristic(Characteristic):
+    cobs_temp = cobs.encode(STATUS_DUMMY.encode()) + b"\x00"
+    #cobs_temp = STATUS_DUMMY.encode()
+
     def __init__(self, bus, index, service):
-        Characteristic.__init__(self, bus, index, COBS_TXRX_CHARACTERISTIC_UUID, ['read','notify','write'], service)
+        Characteristic.__init__(self, bus, index, COBS_TXRX_CHARACTERISTIC_UUID, ['read','notify','write','write-without-response'], service)
         self.notifying = False
         GLib.io_add_watch(sys.stdin, GLib.IO_IN, self.on_console_input)
 
@@ -66,13 +70,17 @@ class COBS_TxRxCharacteristic(Characteristic):
             return
         self.notifying = False
 
+    def ReadValue(self, options):
+        return self.cobs_temp
+
     def WriteValue(self, value, options):
+        self.zero_byte = b"\x00"
         print('remote: {}'.format(bytearray(value).decode()))
         temp = format(bytearray(value).decode())
-        if temp == '${"command":"MA_GET_MACHINE_STATUS"}\00':            
-            for c in temp:
-                value.append(dbus.Byte(c.encode()))
-            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': value}, [])
+
+        if (temp == '${"command":"MA_GET_MACHINE_STATUS"}\00') or temp == b"\x12":
+            cobs_temp = cobs.encode(STATUS_DUMMY.encode()) + self.zero_byte
+            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': cobs_temp}, [])
 
 
 class NUS_TxCharacteristic(Characteristic):
@@ -197,12 +205,12 @@ def main():
     ad_manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, adapter),
                                 LE_ADVERTISING_MANAGER_IFACE)
 
-    nus_app = UartApplication(bus,'/nus')
+    #nus_app = UartApplication(bus,'/nus')
     #nus_adv = UartAdvertisement(bus, 0)
-    service_manager.RegisterApplication(nus_app.get_path(), {},reply_handler=register_app_cb,error_handler=register_app_error_cb)
+    #service_manager.RegisterApplication(nus_app.get_path(), {},reply_handler=register_app_cb,error_handler=register_app_error_cb)
     #ad_manager.RegisterAdvertisement(nus_adv.get_path(), {},reply_handler=register_ad_cb,error_handler=register_ad_error_cb)
 
-    cobs_app = CobsApplication(bus,'/cobs')
+    cobs_app = CobsApplication(bus,'/')
     cobs_adv = CobsAdvertisement(bus, 0)
     service_manager.RegisterApplication(cobs_app.get_path(), {},reply_handler=register_app_cb,error_handler=register_app_error_cb)
     ad_manager.RegisterAdvertisement(cobs_adv.get_path(), {},reply_handler=register_ad_cb,error_handler=register_ad_error_cb)
